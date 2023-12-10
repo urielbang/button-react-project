@@ -3,8 +3,9 @@ import Link from "./Link";
 function Sidebar() {
   const links = [
     { label: "Dropdown", path: "/" },
-    { label: "Accordion", path: "./Accordion" },
+    { label: "Accordion", path: "/accordion" },
     { label: "Buttons", path: "/Button" },
+    { label: "Modal", path: "/modal" },
   ];
   const renderdLinks = links.map((link) => {
     return (
