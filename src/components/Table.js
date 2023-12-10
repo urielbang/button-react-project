@@ -1,15 +1,18 @@
-function Table({ data, config }) {
+function Table({ data, config, keyFn }) {
   const renderdHeaders = config.map((column) => {
     return <th key={column.label}>{column.label}</th>;
   });
-  const renderRows = data.map((fruit) => {
-    return (
-      <tr className="border-b" key={fruit.name}>
-        <td className="p-3">{fruit.name}</td>
-        <td className="p-3">
-          <div className={`p-3 m-2 ${fruit.color}`}></div>
+  const renderRows = data.map((rowData) => {
+    const renderrdCells = config.map((column) => {
+      return (
+        <td className="p-2" key={column.label}>
+          {column.render(rowData)}
         </td>
-        <td className="p-3">{fruit.score}</td>
+      );
+    });
+    return (
+      <tr className="border-b" key={keyFn(rowData)}>
+        {renderrdCells}
       </tr>
     );
   });
