@@ -1,52 +1,57 @@
 import { useReducer } from "react";
+import { produce } from "immer";
 import Button from "../components/Button";
 import Panel from "../components/Panel";
+
+const INCEMENT_COUNT = "increment";
+const SET_VALUE_TO_ADD = "change-value-to-add";
+const DECREMENT_COUNT = "decrement";
+const ADD_VALUE_TO_COUNT = "add_value_to_count";
 
 function CounterPage({ initiLCount }) {
   // const [count, setCount] = useState(initiLCount);
   // const [valueToAdd, setValueToAdd] = useState(0);
 
   const reducer = (state, action) => {
-    if (action.type === "increment") {
-      return {
-        ...state,
-        count: state.count + 1,
-      };
+    switch (action.type) {
+      case INCEMENT_COUNT:
+        state.count = state.count + 1;
+        return;
+      case SET_VALUE_TO_ADD:
+        state.valueToAdd = action.playoad;
+        return;
+      case DECREMENT_COUNT:
+        state.count = state.count - 1;
+        return;
+      case ADD_VALUE_TO_COUNT:
+        state.count = state.count + state.valueToAdd;
+        state.valueToAdd = 0;
+
+        return;
+      default:
+        return;
     }
-    if (action.type === "change-value-to-add") {
-      return {
-        ...state,
-        valueToAdd: action.playoad,
-      };
-    }
-    if (action.type === "decrement") {
-      return {
-        ...state,
-        count: state.count - 1,
-      };
-    }
-    return state;
   };
 
-  const [state, dispatch] = useReducer(reducer, {
+  const [state, dispatch] = useReducer(produce(reducer), {
     count: initiLCount,
     valueToAdd: 0,
   });
 
   const increment = () => {
     dispatch({
-      type: "increment",
+      type: INCEMENT_COUNT,
     });
   };
   const decrement = () => {
     dispatch({
-      type: "decrement",
+      type: DECREMENT_COUNT,
     });
   };
   const handleChange = (event) => {
     const value = parseInt(event.target.value) || 0;
     dispatch({
-      type: "change-value-to-add",
+      type: SET_VALUE_TO_ADD,
       playoad: value,
     });
   };
@@ -54,8 +59,9 @@ function CounterPage({ initiLCount }) {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    // setCount(count + valueToAdd);
-    // setValueToAdd(0);
+    dispatch({
+      type: ADD_VALUE_TO_COUNT,
+    });
   };
   return (
     <Panel className="m-3">
